@@ -1,23 +1,29 @@
 # Job based on the repository https://github.com/arduino/arduino-cli-example
 
 name: buildExamples
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  runs-on: ubuntu-latest
+  builds:
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout
-      uses: actions/checkout@master
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
 
-    - name: Setup Arduino CLI
-      uses: arduino/setup-arduino-cli@v1.0.0
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v1.0.0
 
-    - name: Install platform
-      run: |
-        arduino-cli core update-index
-        arduino-cli core install arduino:avr
+      - name: Install platform
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
 
-    #builds using the script, so we can do this locally as well
-    - name: Compile Everything
-      run: arduino-cli compile --fqbn arduino:avr:uno .
+      #builds using the script, so we can do this locally as well
+      - name: Compile Everything
+        run: arduino-cli compile --fqbn arduino:avr:uno .
